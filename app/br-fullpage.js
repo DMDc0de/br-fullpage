@@ -24,6 +24,7 @@
                 angular.element(pages[0]).css(
                     'marginTop', '-' + pageHeight * pageIndex + 'px'
                 );
+
                 angular.element(document.getElementsByClassName('br-fullpage-nav-item')).removeClass('active');
                 angular.element(document.getElementsByClassName('br-fullpage-nav-item')[pageIndex]).addClass('active');
                 sessionStorage.setItem('br-fullpage-index', pageIndex);
@@ -94,6 +95,16 @@
                     );
                     angular.element(document.getElementsByClassName('br-fullpage-nav-item')).removeClass('active');
                     angular.element(document.getElementsByClassName('br-fullpage-nav-item')[pageIndex]).addClass('active');
+                    console.log('page-' + (parseInt(pageIndex)));
+                    var wrapperClass = angular.element(document.getElementsByClassName('br-fullpage-wrapper'))[0].className;
+                    angular.element(document.getElementsByClassName('br-fullpage-wrapper'))[0].className = wrapperClass.replace(/(^|\s)page-\S+/g, '') + ' page-' + (parseInt(pageIndex));
+
+
+                    for(var i = 0; i < pages.length; i++){
+                        (i === pageIndex) ? angular.element(pages[i]).addClass('active') : angular.element(pages[i]).removeClass('active');
+                    }
+
+
                     sessionStorage.setItem('br-fullpage-index', pageIndex);
 
                     setTimeout(function () {
