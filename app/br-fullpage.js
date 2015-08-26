@@ -40,8 +40,8 @@
         }
     }
 
-    function FullPage($window){
-        function fullPage($scope, $element, $attr){
+    function FullPage($window, $timeout){
+        function fullPage($scope, $element, $attr, controller, transcludeFn){
             pages = document.getElementsByClassName($attr.pageClass);
             nav = document.getElementsByClassName('br-fullpage-nav')[0];
             pageHeight = $window.innerHeight;
@@ -52,6 +52,8 @@
             if (!pageIndex){
                 pageIndex = 0;
             }
+
+            $scope.activeIndex = pageIndex;
 
             //add fullpage class
             angular.element(pages).addClass('br-fullpage');
@@ -90,12 +92,12 @@
                     else {
                         nextPage();
                     }
+
                     angular.element(pages[0]).css(
                         'marginTop', '-' + pageHeight * pageIndex + 'px'
                     );
                     angular.element(document.getElementsByClassName('br-fullpage-nav-item')).removeClass('active');
                     angular.element(document.getElementsByClassName('br-fullpage-nav-item')[pageIndex]).addClass('active');
-                    console.log('page-' + (parseInt(pageIndex)));
                     var wrapperClass = angular.element(document.getElementsByClassName('br-fullpage-wrapper'))[0].className;
                     angular.element(document.getElementsByClassName('br-fullpage-wrapper'))[0].className = wrapperClass.replace(/(^|\s)page-\S+/g, '') + ' page-' + (parseInt(pageIndex));
 
@@ -110,6 +112,9 @@
                     setTimeout(function () {
                         scrolling = false;
                     }, 1000);
+
+                    $scope.activeIndex = pageIndex;
+                    $scope.$apply();
                 }
             }
 
@@ -117,12 +122,14 @@
                 if (pageIndex !== 0) {
                     pageIndex--;
                 }
+
             }
 
             function nextPage() {
                 if (pageIndex < (pages.length-1)){
                     pageIndex++;
                 }
+
             }
 
             function getEvent(e) {
@@ -203,6 +210,9 @@
             restrict: 'E',
             transclude: true,
             replace: true,
+            scope: {
+                index: '=index'
+            },
             link: fullPage
         }
     }

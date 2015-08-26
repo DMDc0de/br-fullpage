@@ -15,7 +15,7 @@
         }
     </style>
 </head>
-<body>
+<body ng-init="activeIndex = -1">
 <section class="nav navbar navbar-default navbar-fixed-top" ng-cloak>
     <section class="container">
         <div class="navbar-header">
@@ -53,7 +53,7 @@
         </div>
     </section>
 </section>
-<fullpage class="instant-size" page-class="page">
+<fullpage class="instant-size" page-class="page" index="activeIndex">
     <section class="page" id="page1">
         <section class="container">
             <h1>Page 1</h1>
@@ -74,6 +74,7 @@
             <h1>Page 4</h1>
         </section>
     </section>
+
 </fullpage>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/jquery/dist/jquery.js"></script>
