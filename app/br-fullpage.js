@@ -53,7 +53,7 @@
                 pageIndex = 0;
             }
 
-            $scope.activeIndex = pageIndex;
+            $scope.index = pageIndex;
 
             //add fullpage class
             angular.element(pages).addClass('br-fullpage');
@@ -113,7 +113,7 @@
                         scrolling = false;
                     }, 1000);
 
-                    $scope.activeIndex = pageIndex;
+                    $scope.index = pageIndex;
                     $scope.$apply();
                 }
             }
