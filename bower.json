@@ -1,9 +1,9 @@
 {
   "name": "br-fullpage",
   "version": "1.2.0",
-  "homepage": "https://github.com/BjornRombaut/br-fullpage",
+  "homepage": "https://github.com/DMDc0de/br-fullpage",
   "authors": [
-    "Bjorn Rombaut <bjorn.rombaut1991@gmail.com>"
+    "Bjorn Rombaut <bjorn.rombaut1991@gmail.com>, Daniele De Matteo <dandem87@gmail.com>"
   ],
   "description": "Angular directive for full page scrolling applications",
   "main": [
