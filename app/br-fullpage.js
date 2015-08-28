@@ -24,10 +24,9 @@
                 angular.element(pages[0]).css(
                     'marginTop', '-' + pageHeight * pageIndex + 'px'
                 );
-
                 angular.element(document.getElementsByClassName('br-fullpage-nav-item')).removeClass('active');
                 angular.element(document.getElementsByClassName('br-fullpage-nav-item')[pageIndex]).addClass('active');
-                sessionStorage.setItem('br-fullpage-index', pageIndex);
+                //sessionStorage.setItem('br-fullpage-index', pageIndex);
             });
         }
 
@@ -40,20 +39,18 @@
         }
     }
 
-    function FullPage($window, $timeout){
-        function fullPage($scope, $element, $attr, controller, transcludeFn){
+    function FullPage($window){
+        function fullPage($scope, $element, $attr){
             pages = document.getElementsByClassName($attr.pageClass);
             nav = document.getElementsByClassName('br-fullpage-nav')[0];
             pageHeight = $window.innerHeight;
             scrolling = false;
 
             //retrieve page index from session storage
-            pageIndex = sessionStorage.getItem('br-fullpage-index');
+            // pageIndex = sessionStorage.getItem('br-fullpage-index');
             if (!pageIndex){
                 pageIndex = 0;
             }
-
-            $scope.index = pageIndex;
 
             //add fullpage class
             angular.element(pages).addClass('br-fullpage');
@@ -92,29 +89,16 @@
                     else {
                         nextPage();
                     }
-
                     angular.element(pages[0]).css(
                         'marginTop', '-' + pageHeight * pageIndex + 'px'
                     );
                     angular.element(document.getElementsByClassName('br-fullpage-nav-item')).removeClass('active');
                     angular.element(document.getElementsByClassName('br-fullpage-nav-item')[pageIndex]).addClass('active');
-                    var wrapperClass = angular.element(document.getElementsByClassName('br-fullpage-wrapper'))[0].className;
-                    angular.element(document.getElementsByClassName('br-fullpage-wrapper'))[0].className = wrapperClass.replace(/(^|\s)page-\S+/g, '') + ' page-' + (parseInt(pageIndex));
-
-
-                    for(var i = 0; i < pages.length; i++){
-                        (i === pageIndex) ? angular.element(pages[i]).addClass('active') : angular.element(pages[i]).removeClass('active');
-                    }
-
-
-                    sessionStorage.setItem('br-fullpage-index', pageIndex);
+                    //sessionStorage.setItem('br-fullpage-index', pageIndex);
 
                     setTimeout(function () {
                         scrolling = false;
                     }, 1000);
-
-                    $scope.index = pageIndex;
-                    $scope.$apply();
                 }
             }
 
@@ -122,14 +106,12 @@
                 if (pageIndex !== 0) {
                     pageIndex--;
                 }
-
             }
 
             function nextPage() {
                 if (pageIndex < (pages.length-1)){
                     pageIndex++;
                 }
-
             }
 
             function getEvent(e) {
@@ -139,7 +121,9 @@
             function mouseScroll(e){
                 var event = getEvent(e);
                 event.preventDefault();
-                var delta = event.detail? event.detail*(-120) : event.wheelDelta;
+                // var delta = e.detail? e.detail*(-120) : extractDelta(event);
+                var delta = Math.max(-1, Math.min(1, (event.wheelDelta || event.deltaY || -event.detail)));
+
                 paginate(delta);
             }
 
@@ -149,12 +133,12 @@
                 var event = getEvent(e);
                 if (!swiping) {
                     swiping = true;
-                    startTouchY = event.changedTouches[0].pageY;
+                    startTouchY = isNaN(event.changedTouches) ? event.pageY : event.changedTouches[0].pageY;
                 }
             }
             function endTouch(e){
                 var event = getEvent(e);
-                var endTouchY = event.changedTouches[0].pageY;
+                var endTouchY = isNaN(event.changedTouches) ? event.pageY : event.changedTouches[0].pageY;;
                 if (swiping && endTouchY != startTouchY) {
                     event.preventDefault();
                     swiping = false;
@@ -178,11 +162,11 @@
 
             angular.element(document).bind("touchstart", startTouch); //Mobile
             angular.element(document).bind("pointerdown", startTouch); //Mobile
-            angular.element(document).bind("MSPointerDown", startTouch); //Mobile
+            // angular.element(document).bind("MSPointerDown", startTouch); //Mobile
 
             angular.element(document).bind("touchmove", endTouch); //Mobile
             angular.element(document).bind("pointermove", endTouch); //Mobile
-            angular.element(document).bind("MSPointerMove", endTouch); //Mobile
+            // angular.element(document).bind("MSPointerMove", endTouch); //Mobile
 
             angular.element($window).bind("resize", resize);
 
@@ -210,9 +194,6 @@
             restrict: 'E',
             transclude: true,
             replace: true,
-            scope: {
-                index: '=index'
-            },
             link: fullPage
         }
     }
